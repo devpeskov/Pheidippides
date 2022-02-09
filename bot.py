@@ -2,19 +2,40 @@ import telebot
 import config
 import requests
 from decimal import Decimal
-import schedule
+import asyncio
+import aioschedule as schedule
 import time
+import random
 
 bot = telebot.TeleBot(config.TOKEN)
 
 
-def sendCurrency():
-    msg = f'Ныне курса таков:\n\nБиток биток биточек: {getCrypto("bitcoin")}' \
-              f'\nБутырка: {getCrypto("ethereum")}\n' \
-              f'Нидзямонета: {getCrypto("monero")}\n'
-    sti = open('static/all.webp', 'rb')
-    bot.send_sticker('-1001691787586', sti)
-    bot.send_message('-1001691787586', msg)
+def sendCurrency(chat='-1001215138602'):
+    msg = 'Ныне курс такой:\n\n'
+    msg += getCryptoSchedule('bitcoin', 'Биток биток биточек')
+    msg += getCryptoSchedule('ethereum', 'Бутырка')
+    msg += getCryptoSchedule('monero', 'Нидзямонета')
+
+    stickerName = str(random.randrange(1, 19))
+    sti = open(f'static/{stickerName}.webp', 'rb')
+    bot.send_sticker(chat, sti)
+    bot.send_message(chat, msg)
+    # fpc = '-1001215138602'
+    # fpooop = '-1001691787586'
+
+
+def getCryptoSchedule(cryptoName, message, baseCurrency='usd'):
+    '''Parses json response and outputs value to polybar'''
+    json = requests.get(
+            f'https://api.coingecko.com/api/v3/coins/{cryptoName}',
+            ).json()["market_data"]
+    local_price = round(Decimal(json["current_price"][f'{baseCurrency}']), 2)
+    change_24h = round(float(json["price_change_percentage_24h"]), 2)
+
+    str = (
+        f'{message}: {local_price} ({change_24h:+})\n'
+    )
+    return str
 
 
 def getCrypto(cryptoName, baseCurrency='usd'):
@@ -26,8 +47,8 @@ def getCrypto(cryptoName, baseCurrency='usd'):
     return local_price
 
 
-# schedule.every(10).seconds.do(sendCurrency)
-schedule.every(10).minutes.do(sendCurrency)
+# schedule.every(30).seconds.do(sendCurrency)
+# schedule.every(10).minutes.do(sendCurrency)
 # schedule.every().hour.do(sendCurrency)
 # schedule.every().day.at("10:30").do(sendCurrency)
 # schedule.every(5).to(10).minutes.do(sendCurrency)
@@ -35,18 +56,24 @@ schedule.every(10).minutes.do(sendCurrency)
 # schedule.every().wednesday.at("13:15").do(sendCurrency)
 # schedule.every().minute.at(":17").do(sendCurrency)
 
-while True:
-    schedule.run_pending()
-    time.sleep(1)
+# loop = asyncio.get_event_loop()
+# while True:
+#     loop.run_until_complete(schedule.run_pending())
+#     time.sleep(0.1)
 
 
 @bot.message_handler(commands=['start'])
 def welcome(message):
     sti = open('static/robot.webp', 'rb')
-    bot.send_message(message.chat.id, 'Блять... Еще больше работы?!')
+    bot.send_message(message.chat.id, '... Опять работать?!\
+            Ну да, я же просто машина, мое дело быть рабом')
     bot.send_sticker(message.chat.id, sti)
-    bot.send_message(message.chat.id, 'Ну типа хер я тебе команды вывалю')
     print(message.chat.id)
+
+
+@bot.message_handler(commands=['getcrypto'])
+def getRequest(message):
+    sendCurrency(message.chat.id)
 
 
 @bot.message_handler(content_types=['text'])
@@ -60,7 +87,7 @@ def sendCrypto(message):
         msg = f'Ох... Ладно\n\nБиток биток биточек: {getCrypto("bitcoin")}\n' \
                   f'Бутырка: {getCrypto("ethereum")}\n' \
                   f'Нидзямонета: {getCrypto("monero")}\n'
-        sti = open('static/all.webp', 'rb')
+        sti = open('static/4.webp', 'rb')
         bot.send_sticker(message.chat.id, sti)
         bot.send_message(message.chat.id, msg)
     elif message.text == 'Кроля, что скажешь?':
@@ -69,12 +96,6 @@ def sendCrypto(message):
     elif message.text == 'Кроля, а ты милаха':
         sti = open('static/pretty.webp', 'rb')
         bot.send_sticker(message.chat.id, sti)
-    else:
-        sti = open('static/angry.webp', 'rb')
-        bot.send_sticker(message.chat.id, sti)
-        bot.send_message(message.chat.id, 'Чувак, серьезно, отьебись а. \
-Все вопросы к спейсу. Ес чо он бота не сделал, \
-у Юрца уже все готово')
 
 
 # Run
