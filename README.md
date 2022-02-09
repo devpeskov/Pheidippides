@@ -6,7 +6,7 @@
 git clone https://gitlab.com/freedom-pride-chat/crypto-kroleg.git
 cd crypto-kroleg
 # Разверните и активируйте венв если не хотите срать зависимостями
-pip install pyTelegramBotApi
+pip install -r requirements.txt
 ```
 2. В корне проекта создать config.py со следующим содержимым:
 ```
