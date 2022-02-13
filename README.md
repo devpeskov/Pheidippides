@@ -15,7 +15,7 @@ TOKEN = 'YOUR_BOT_TOKEN'
 ```
 3. Заранить бота:
 ```
-python bot.py
+python krolya.py
 ```
 
 На этом все. Отрубить лютого можно комбинацией C-c.
