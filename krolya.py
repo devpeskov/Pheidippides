@@ -47,7 +47,7 @@ def getCrypto(cryptoName, baseCurrency='usd'):
     return local_price
 
 
-# schedule.every(30).seconds.do(sendCurrency)
+schedule.every(10).seconds.do(sendCurrency)
 # schedule.every(10).minutes.do(sendCurrency)
 # schedule.every().hour.do(sendCurrency)
 # schedule.every().day.at("10:30").do(sendCurrency)
@@ -56,17 +56,18 @@ def getCrypto(cryptoName, baseCurrency='usd'):
 # schedule.every().wednesday.at("13:15").do(sendCurrency)
 # schedule.every().minute.at(":17").do(sendCurrency)
 
-# loop = asyncio.get_event_loop()
-# while True:
-#     loop.run_until_complete(schedule.run_pending())
-#     time.sleep(0.1)
+loop = asyncio.get_event_loop()
+while True:
+    loop.run_until_complete(schedule.run_pending())
+    time.sleep(0.1)
 
 
 @bot.message_handler(commands=['start'])
 def welcome(message):
     sti = open('static/robot.webp', 'rb')
-    bot.send_message(message.chat.id, '... Опять работать?!\
-            Ну да, я же просто машина, мое дело быть рабом')
+    msg = '... Опять работать?! Ну да, я же просто машина, мое дело быть рабом'
+
+    bot.send_message(message.chat.id, msg)
     bot.send_sticker(message.chat.id, sti)
     print(message.chat.id)
 
@@ -91,11 +92,16 @@ def sendCrypto(message):
         bot.send_sticker(message.chat.id, sti)
         bot.send_message(message.chat.id, msg)
     elif message.text == 'Кроля, что скажешь?':
+        bot.send_message(message.chat.id,
+                         "Скажу, что сказать надо с буквой 'Ass'")
         sti = open('static/n.webp', 'rb')
         bot.send_sticker(message.chat.id, sti)
     elif message.text == 'Кроля, а ты милаха':
         sti = open('static/pretty.webp', 'rb')
         bot.send_sticker(message.chat.id, sti)
+    elif message.text == 'Кроля, плюнь в спейса':
+        video = open('static/spit.mp4', 'rb')
+        bot.send_animation(message.chat.id, video)
 
 
 # Run

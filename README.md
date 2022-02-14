@@ -3,7 +3,7 @@
 Для запуска необходимо:
 1. Скачать репо и установить зависимости:
 ```
-git clone https://gitlab.com/freedom-pride-chat/crypto-kroleg.git
+git clone https://gitlab.com/freedom-pride-chat/krolya.git
 cd crypto-kroleg
 # Разверните и активируйте венв если не хотите срать зависимостями
 pip install -r requirements.txt
@@ -15,7 +15,7 @@ TOKEN = 'YOUR_BOT_TOKEN'
 ```
 3. Заранить бота:
 ```
-python bot.py
+python krolya.py
 ```
 
 На этом все. Отрубить лютого можно комбинацией C-c.
