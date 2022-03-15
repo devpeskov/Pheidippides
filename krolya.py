@@ -13,9 +13,9 @@ bot = telebot.TeleBot(config.TOKEN)
 
 
 # chats-id:
-# fpc(default) = '-1001798667684'
-# fpooop = '-1001691787586'
-def sendCurrency(chat='-1001798667684'):
+# fpc = '-1001798667684'
+# fpooop(default) = '-1001691787586'
+def sendCurrency(chat='-1001691787586'):
     dumpJson = requests.get(
         'https://api.coingecko.com/api/v3/coins',
         ).json()
@@ -69,16 +69,12 @@ def getCrypto(cryptoName, baseCurrency='usd'):
 # schedule.every().wednesday.at("13:15").do(sendCurrency)
 # schedule.every().minute.at(":17").do(sendCurrency)
 
-def runSpam():
-    schedule.every(30).seconds.do(sendCurrency)
-    loop = asyncio.get_event_loop()
-    while True:
-        loop.run_until_complete(schedule.run_pending())
-        time.sleep(0.1)
-
-
-t1 = threading.Thread(target=runSpam)
-t1.start()
+schedule.every(10).seconds.do(sendCurrency)
+loop = asyncio.get_event_loop()
+while True:
+    loop.run_until_complete(schedule.run_pending())
+    # loop.run_until_complete(bot.polling(none_stop=True))
+    time.sleep(0.1)
 
 
 @bot.message_handler(commands=['start'])
@@ -124,4 +120,4 @@ def sendCrypto(message):
 
 
 # Run
-bot.polling(none_stop=True)
+# bot.polling(none_stop=True)
