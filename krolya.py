@@ -2,9 +2,11 @@ import telebot
 import config
 import requests
 from decimal import Decimal
-# import asyncio
-# import aioschedule as schedule
-# import time
+
+import threading
+import asyncio
+import aioschedule as schedule
+import time
 import random
 
 bot = telebot.TeleBot(config.TOKEN)
@@ -59,7 +61,6 @@ def getCrypto(cryptoName, baseCurrency='usd'):
     return local_price
 
 
-# schedule.every(10).seconds.do(sendCurrency)
 # schedule.every(10).minutes.do(sendCurrency)
 # schedule.every().hour.do(sendCurrency)
 # schedule.every().day.at("10:30").do(sendCurrency)
@@ -68,10 +69,16 @@ def getCrypto(cryptoName, baseCurrency='usd'):
 # schedule.every().wednesday.at("13:15").do(sendCurrency)
 # schedule.every().minute.at(":17").do(sendCurrency)
 
-# loop = asyncio.get_event_loop()
-# while True:
-#     loop.run_until_complete(schedule.run_pending())
-#     time.sleep(0.1)
+def runSpam():
+    schedule.every(30).seconds.do(sendCurrency)
+    loop = asyncio.get_event_loop()
+    while True:
+        loop.run_until_complete(schedule.run_pending())
+        time.sleep(0.1)
+
+
+t1 = threading.Thread(target=runSpam)
+t1.start()
 
 
 @bot.message_handler(commands=['start'])
