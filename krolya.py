@@ -2,10 +2,13 @@ import telebot
 import config
 import requests
 from decimal import Decimal
-# import asyncio
+import asyncio
 # import aioschedule as schedule
-# import time
+import schedule
+import time
 import random
+import multiprocessing
+import threading
 
 bot = telebot.TeleBot(config.TOKEN)
 
@@ -13,6 +16,7 @@ bot = telebot.TeleBot(config.TOKEN)
 # chats-id:
 # fpc(default) = '-1001798667684'
 # fpooop = '-1001691787586'
+# maintainer = '349777242'
 def sendCurrency(chat='-1001798667684'):
     dumpJson = requests.get(
         'https://api.coingecko.com/api/v3/coins',
@@ -59,7 +63,11 @@ def getCrypto(cryptoName, baseCurrency='usd'):
     return local_price
 
 
-# schedule.every(10).seconds.do(sendCurrency)
+def sendTest(chat='349777242'):
+    bot.send_message(chat, 'Testing schedule')
+
+
+schedule.every(10).seconds.do(sendTest)
 # schedule.every(10).minutes.do(sendCurrency)
 # schedule.every().hour.do(sendCurrency)
 # schedule.every().day.at("10:30").do(sendCurrency)
@@ -68,10 +76,17 @@ def getCrypto(cryptoName, baseCurrency='usd'):
 # schedule.every().wednesday.at("13:15").do(sendCurrency)
 # schedule.every().minute.at(":17").do(sendCurrency)
 
-# loop = asyncio.get_event_loop()
-# while True:
-#     loop.run_until_complete(schedule.run_pending())
-#     time.sleep(0.1)
+
+def sched():
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+
+sch = threading.Thread(target=sched)
+activ = threading.Thread(target=bot.polling(none_stop=True))
+sch.start()
+activ.start()
 
 
 @bot.message_handler(commands=['start'])
@@ -87,33 +102,6 @@ def welcome(message):
 @bot.message_handler(commands=['getcrypto'])
 def getRequest(message):
     sendCurrency(message.chat.id)
-
-
-@bot.message_handler(content_types=['text'])
-def sendCrypto(message):
-    if message.text == 'Кроля, дай монетку':
-        msg = f'Ну держи.\n\nБиток биток биточек: {getCrypto("bitcoin")}\n'
-        sti = open('static/btc.webp', 'rb')
-        bot.send_sticker(message.chat.id, sti)
-        bot.send_message(message.chat.id, msg)
-    elif message.text == 'Кроля, дай многа монеток':
-        msg = f'Ох... Ладно\n\nБатькоин: {getCrypto("bitcoin")}\n' \
-                  f'Эфирка: {getCrypto("ethereum")}\n' \
-                  f'Нидзямонета: {getCrypto("monero")}\n'
-        sti = open('static/4.webp', 'rb')
-        bot.send_sticker(message.chat.id, sti)
-        bot.send_message(message.chat.id, msg)
-    elif message.text == 'Кроля, что скажешь?':
-        bot.send_message(message.chat.id,
-                         "Скажу, что сказать надо с буквой 'Ass'")
-        sti = open('static/n.webp', 'rb')
-        bot.send_sticker(message.chat.id, sti)
-    elif message.text == 'Кроля, а ты милаха':
-        sti = open('static/pretty.webp', 'rb')
-        bot.send_sticker(message.chat.id, sti)
-    elif message.text == 'Кроля, плюнь в спейса':
-        video = open('static/spit.mp4', 'rb')
-        bot.send_animation(message.chat.id, video)
 
 
 # Run
