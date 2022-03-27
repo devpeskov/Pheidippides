@@ -84,9 +84,7 @@ def sched():
 
 
 sch = threading.Thread(target=sched)
-activ = threading.Thread(target=bot.polling(none_stop=True))
 sch.start()
-activ.start()
 
 
 @bot.message_handler(commands=['start'])
