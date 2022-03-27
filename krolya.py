@@ -2,12 +2,12 @@ import telebot
 import config
 import requests
 from decimal import Decimal
-import asyncio
+# import asyncio
 # import aioschedule as schedule
 import schedule
 import time
 import random
-import multiprocessing
+# import multiprocessing
 import threading
 
 bot = telebot.TeleBot(config.TOKEN)
@@ -67,10 +67,10 @@ def sendTest(chat='349777242'):
     bot.send_message(chat, 'Testing schedule')
 
 
-schedule.every(10).seconds.do(sendTest)
+# schedule.every(10).seconds.do(sendCurrency)
 # schedule.every(10).minutes.do(sendCurrency)
 # schedule.every().hour.do(sendCurrency)
-# schedule.every().day.at("10:30").do(sendCurrency)
+schedule.every().day.at("10:30").do(sendCurrency)
 # schedule.every(5).to(10).minutes.do(sendCurrency)
 # schedule.every().monday.do(sendCurrency)
 # schedule.every().wednesday.at("13:15").do(sendCurrency)
