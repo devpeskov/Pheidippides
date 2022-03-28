@@ -77,14 +77,14 @@ schedule.every().day.at("9:30").do(sendCurrency)
 # schedule.every().minute.at(":17").do(sendCurrency)
 
 
-def sched():
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
-
-
-sch = threading.Thread(target=sched)
-sch.start()
+# def sched():
+#     while True:
+#         schedule.run_pending()
+#         time.sleep(1)
+#
+#
+# sch = threading.Thread(target=sched)
+# sch.start()
 
 
 @bot.message_handler(commands=['start'])
