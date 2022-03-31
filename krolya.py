@@ -70,7 +70,8 @@ def sendTest(chat='349777242'):
 # schedule.every(10).seconds.do(sendCurrency)
 # schedule.every(10).minutes.do(sendCurrency)
 # schedule.every().hour.do(sendCurrency)
-schedule.every().day.at("9:30").do(sendTest)
+schedule.every(10).seconds.do(sendTest)
+schedule.every().day.at("09:30").do(sendTest)
 # schedule.every(5).to(10).minutes.do(sendCurrency)
 # schedule.every().monday.do(sendCurrency)
 # schedule.every().wednesday.at("13:15").do(sendCurrency)
@@ -103,4 +104,4 @@ def getRequest(message):
 
 
 # Run
-# bot.polling(none_stop=True)
+bot.polling(none_stop=True)
