@@ -1,14 +1,16 @@
-import telebot
-import config
-import requests
-from decimal import Decimal
-# import asyncio
-# import aioschedule as schedule
-import schedule
-import time
 import random
 # import multiprocessing
 import threading
+import time
+from decimal import Decimal
+
+import requests
+# import asyncio
+# import aioschedule as schedule
+import schedule
+import telebot
+
+import config
 
 bot = telebot.TeleBot(config.TOKEN)
 
