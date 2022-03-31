@@ -70,21 +70,25 @@ def sendTest(chat='349777242'):
 # schedule.every(10).seconds.do(sendCurrency)
 # schedule.every(10).minutes.do(sendCurrency)
 # schedule.every().hour.do(sendCurrency)
+
+# schedule.every(10).seconds.do(sendTest)
 schedule.every().day.at("09:30").do(sendCurrency)
+schedule.every().day.at("12:30").do(sendCurrency)
+
 # schedule.every(5).to(10).minutes.do(sendCurrency)
 # schedule.every().monday.do(sendCurrency)
 # schedule.every().wednesday.at("13:15").do(sendCurrency)
 # schedule.every().minute.at(":17").do(sendCurrency)
 
 
-# def sched():
-#     while True:
-#         schedule.run_pending()
-#         time.sleep(1)
-#
-#
-# sch = threading.Thread(target=sched)
-# sch.start()
+def sched():
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+
+sch = threading.Thread(target=sched)
+sch.start()
 
 
 @bot.message_handler(commands=['start'])
