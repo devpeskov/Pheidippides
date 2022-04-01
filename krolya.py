@@ -22,7 +22,7 @@ bot = telebot.TeleBot(config.TOKEN)
 def sendCurrency(chat='-1001798667684'):
     dumpJson = requests.get(
         'https://api.coingecko.com/api/v3/coins',
-        ).json()
+    ).json()
     stickerSwitch = dumpJson[0]['market_data']['price_change_percentage_24h']
     msg = 'Ныне курс такой:\n\n'
     msg += formMessage('bitcoin', 'Батькоин', dumpJson)
@@ -40,7 +40,8 @@ def formMessage(cryptoName, message, dumpJson, baseCurrency='usd'):
         if json['id'] == cryptoName:
             coinJson = json['market_data']
 
-    local_price = round(Decimal(coinJson["current_price"][f'{baseCurrency}']), 2)
+    local_price = round(
+        Decimal(coinJson["current_price"][f'{baseCurrency}']), 2)
     change_24h = round(float(coinJson["price_change_percentage_24h"]), 2)
     return f'{message}: {local_price} ({change_24h:+})\n'
 
@@ -59,8 +60,8 @@ def chooseSticker(change_24h):
 def getCrypto(cryptoName, baseCurrency='usd'):
     '''Parses json response and outputs value to polybar'''
     json = requests.get(
-            f'https://api.coingecko.com/api/v3/coins/{cryptoName}',
-            ).json()["market_data"]
+        f'https://api.coingecko.com/api/v3/coins/{cryptoName}',
+    ).json()["market_data"]
     local_price = round(Decimal(json["current_price"][f'{baseCurrency}']), 2)
     return local_price
 
@@ -75,7 +76,7 @@ def sendTest(chat='349777242'):
 
 # schedule.every(10).seconds.do(sendTest)
 schedule.every().day.at("09:30").do(sendCurrency)
-schedule.every().day.at("12:30").do(sendCurrency)
+# schedule.every().day.at("12:30").do(sendCurrency)
 
 # schedule.every(5).to(10).minutes.do(sendCurrency)
 # schedule.every().monday.do(sendCurrency)
