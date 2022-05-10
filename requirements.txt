@@ -1,3 +1,5 @@
-pyTelegramBotApi
-schedule
-aioschedule
+pynvim
+isort
+black
+pytelegrambotapi
+aiohttp

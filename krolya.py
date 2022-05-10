@@ -1,25 +1,29 @@
 import random
-# import multiprocessing
-import threading
-import time
+# import threading
+# import time
 from decimal import Decimal
 
 import requests
 # import asyncio
 # import aioschedule as schedule
-import schedule
+# import schedule
 import telebot
+import json
 
 import config
 
 bot = telebot.TeleBot(config.TOKEN)
 
 
+with open('static.json') as f:
+    media = json.load(f)
+    stickers = media.get('stickers')
+
+
 # chats-id:
 # fpc(default) = '-1001798667684'
-# fpooop = '-1001691787586'
 # maintainer = '349777242'
-def sendCurrency(chat='-1001798667684'):
+def sendCurrency(chat='349777242'):
     dumpJson = requests.get(
         'https://api.coingecko.com/api/v3/coins',
     ).json()
@@ -36,9 +40,9 @@ def sendCurrency(chat='-1001798667684'):
 def formMessage(cryptoName, message, dumpJson, baseCurrency='usd'):
     '''Parses json response and outputs value to polybar'''
     coinJson = []
-    for json in dumpJson:
-        if json['id'] == cryptoName:
-            coinJson = json['market_data']
+    for member_json in dumpJson:
+        if member_json['id'] == cryptoName:
+            coinJson = member_json['market_data']
 
     local_price = round(
         Decimal(coinJson["current_price"][f'{baseCurrency}']), 2)
@@ -48,13 +52,9 @@ def formMessage(cryptoName, message, dumpJson, baseCurrency='usd'):
 
 def chooseSticker(change_24h):
     if change_24h >= 0:
-        stickerName = str(random.randrange(1, 7))
-        sti = open(f'static/good/{stickerName}.webp', 'rb')
-        return sti
+        return str(stickers.get('good').get(f'{random.randrange(1, 7)}'))
     else:
-        stickerName = str(random.randrange(1, 13))
-        sti = open(f'static/bad/{stickerName}.webp', 'rb')
-        return sti
+        return str(stickers.get('bad').get(f'{random.randrange(1, 13)}'))
 
 
 def getCrypto(cryptoName, baseCurrency='usd'):
@@ -66,47 +66,51 @@ def getCrypto(cryptoName, baseCurrency='usd'):
     return local_price
 
 
-def sendTest(chat='349777242'):
-    bot.send_message(chat, 'Testing schedule')
-
-
-# schedule.every(10).seconds.do(sendCurrency)
-# schedule.every(10).minutes.do(sendCurrency)
-# schedule.every().hour.do(sendCurrency)
-
-# schedule.every(10).seconds.do(sendTest)
-schedule.every().day.at("09:30").do(sendCurrency)
-# schedule.every().day.at("12:30").do(sendCurrency)
-
-# schedule.every(5).to(10).minutes.do(sendCurrency)
-# schedule.every().monday.do(sendCurrency)
-# schedule.every().wednesday.at("13:15").do(sendCurrency)
-# schedule.every().minute.at(":17").do(sendCurrency)
-
-
-def sched():
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
-
-
-sch = threading.Thread(target=sched)
-sch.start()
-
-
 @bot.message_handler(commands=['start'])
 def welcome(message):
-    sti = open('static/robot.webp', 'rb')
     msg = '... Опять работать?! Ну да, я же просто машина, мое дело быть рабом'
 
     bot.send_message(message.chat.id, msg)
-    bot.send_sticker(message.chat.id, sti)
+    bot.send_sticker(message.chat.id, stickers.get('robot'))
     print(message.chat.id)
 
 
 @bot.message_handler(commands=['getcrypto'])
 def getRequest(message):
     sendCurrency(message.chat.id)
+
+
+# Получить айдишники файлов
+# @bot.message_handler(commands=['getSti'])
+# def giveSti(message):
+#     for i in range(1, 7):
+#         sti = open(f'static/good/{i}.webp', 'rb')
+#         msg = bot.send_sticker(message.chat.id, sti)
+#         bot.send_message(message.chat.id, f'`{msg.sticker.file_id}`', reply_to_message_id=msg.message_id, parse_mode='MARKDOWN')
+#     for i in range(1, 13):
+#         sti = open(f'static/bad/{i}.webp', 'rb')
+#         msg = bot.send_sticker(message.chat.id, sti)
+#         bot.send_message(message.chat.id, f'`{msg.sticker.file_id}`', reply_to_message_id=msg.message_id, parse_mode='MARKDOWN')
+#
+#     sti = open('static/pretty.webp', 'rb')
+#     msg = bot.send_sticker(message.chat.id, sti)
+#     bot.send_message(message.chat.id, f'`{msg.sticker.file_id}`', reply_to_message_id=msg.message_id, parse_mode='MARKDOWN')
+#
+#     sti = open('static/robot.webp', 'rb')
+#     msg = bot.send_sticker(message.chat.id, sti)
+#     bot.send_message(message.chat.id, f'`{msg.sticker.file_id}`', reply_to_message_id=msg.message_id, parse_mode='MARKDOWN')
+#
+#     video = open('static/spit.mp4', 'rb')
+#     msg = bot.send_animation(message.chat.id, video)
+#     bot.send_message(message.chat.id, f'`{msg.animation.file_id}`', reply_to_message_id=msg.message_id, parse_mode='MARKDOWN')
+
+
+@bot.message_handler(content_types=['text'])
+def sendCrypto(message):
+    if message.text == 'Кроля, а ты милаха':
+        bot.send_sticker(message.chat.id, stickers.get('pretty'), reply_to_message_id=message.message_id)
+    elif message.text == 'Кроля, плюнь в спейса':
+        bot.send_animation(message.chat.id, media.get('spit'), reply_to_message_id=message.message_id)
 
 
 # Run
