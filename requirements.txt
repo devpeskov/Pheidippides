@@ -1,5 +1,0 @@
-pynvim
-isort
-black
-pytelegrambotapi
-aiohttp
