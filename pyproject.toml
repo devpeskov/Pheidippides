@@ -8,6 +8,7 @@ authors = ["inauris <inauris@protonmail.com>"]
 python = "^3.10"
 pyTelegramBotAPI = "^4.5.1"
 aiohttp = "^3.8.1"
+python-dotenv = "^0.20.0"
 
 [tool.poetry.dev-dependencies]
 pynvim = "^0.4.3"
