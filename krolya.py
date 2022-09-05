@@ -1,16 +1,12 @@
 import json
 import random
-
-# import threading
-# import time
+import threading
+import time
 from decimal import Decimal
 
-import requests  # type: ignore
-
-# import asyncio
-# import aioschedule as schedule
-# import schedule
-import telebot  # type: ignore
+import requests
+import schedule
+import telebot
 
 import config
 
