@@ -6,9 +6,9 @@ authors = ["inauris <inauris@protonmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-pyTelegramBotAPI = "^4.5.1"
 aiohttp = "^3.8.1"
 python-dotenv = "^0.20.0"
+aiogram = "^2.22.1"
 
 [tool.poetry.dev-dependencies]
 pynvim = "^0.4.3"
