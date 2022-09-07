@@ -4,8 +4,9 @@ import logging
 from aiogram import Bot, Dispatcher  # type: ignore
 from aiogram.types import BotCommand  # type: ignore
 
-from app.handlers.common_commands import register_handlers_common
 from app.config import TOKEN
+from app.handlers.common_commands import register_handlers_common
+from app.handlers.inline_mode import register_inline_handlers
 
 logger = logging.getLogger(__name__)
 
@@ -15,6 +16,10 @@ async def set_commands(bot: Bot) -> None:
         BotCommand(
             command="/getcrypto",
             description="Get a cryptocurrency rate",
+        ),
+        BotCommand(
+            command="/getallcoins",
+            description="Get rate all cryptocurrency",
         ),
     ]
     await bot.set_my_commands(commands)
@@ -36,6 +41,7 @@ async def main() -> None:
     dp = Dispatcher(bot)
 
     register_handlers_common(dp)
+    register_inline_handlers(dp)
 
     # await del_commands(bot)
     await set_commands(bot)
