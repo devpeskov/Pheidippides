@@ -115,8 +115,7 @@ async def _test_service():
     # coins = await get_specific_coins(["bitcoin", "ethereum"])
     coins = await get_all_coins()
     for coin in coins:
-        # print(f"{coin.name} {coin.price} {coin.price_change_24h}")
-        print(f"{type(coin.price)} - {coin.price}")
+        print(f"{coin.name}: {coin.price} ({coin.price_change_24h:+}%)")
 
 
 if __name__ == "__main__":
