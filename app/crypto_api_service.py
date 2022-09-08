@@ -19,7 +19,7 @@ class Coin(NamedTuple):
 
 
 class _ApiMarketData(TypedDict):
-    current_price: dict[_CurrencyCode, Decimal]
+    current_price: dict[_CurrencyCode, float]
     price_change_percentage_24h: float
 
 
@@ -80,9 +80,7 @@ async def _parse_response(response: _ApiResponseEntry, baseCurrency) -> Coin:
         # "thumb" smaller than "small", bot too small
         img_small=response["image"]["small"],
         img_large=response["image"]["large"],
-        price=round(
-            Decimal(market_data["current_price"][f"{baseCurrency}"]), 2
-        ),
+        price=_price_rounder(market_data["current_price"][baseCurrency]),
         price_change_24h=round(
             float(market_data["price_change_percentage_24h"]), 2
         ),
@@ -90,10 +88,35 @@ async def _parse_response(response: _ApiResponseEntry, baseCurrency) -> Coin:
     return coinInfo
 
 
+def _price_rounder(price: float) -> Decimal:
+    """Controls the number of digits after the decimal point"""
+    decimal_price = Decimal(price)
+    if decimal_price >= 100:
+        return round(decimal_price, 0)
+    elif decimal_price >= 10:
+        return round(decimal_price, 1)
+    elif decimal_price >= 1:
+        return round(decimal_price, 2)
+    elif decimal_price >= 0.1:
+        return round(decimal_price, 3)
+    elif decimal_price >= 0.01:
+        return round(decimal_price, 4)
+    elif decimal_price >= 0.001:
+        return round(decimal_price, 5)
+    elif decimal_price >= 0.0001:
+        return round(decimal_price, 6)
+    elif decimal_price >= 0.00001:
+        return round(decimal_price, 7)
+    else:
+        return round(decimal_price, 8)
+
+
 async def _test_service():
-    coins = await get_specific_coins(["bitcoin", "ethereum"])
+    # coins = await get_specific_coins(["bitcoin", "ethereum"])
+    coins = await get_all_coins()
     for coin in coins:
-        print(coin)
+        # print(f"{coin.name} {coin.price} {coin.price_change_24h}")
+        print(f"{type(coin.price)} - {coin.price}")
 
 
 if __name__ == "__main__":
