@@ -1,35 +1,15 @@
 import asyncio
 from decimal import Decimal
-from typing import Literal, NamedTuple, TypedDict
 
-from aiohttp import ClientSession  # type: ignore
+from aiohttp import ClientSession
+
+from .caching import cache_coin, cache_coins
+from .objects import ApiResponseEntry, Coin
 
 _COINGECKO_URL = "https://api.coingecko.com/api/v3/coins/"
-_CurrencyCode = str
-_ImgUrl = str
 
 
-class Coin(NamedTuple):
-    id: str
-    name: str
-    img_small: str
-    img_large: str
-    price: Decimal
-    price_change_24h: float
-
-
-class _ApiMarketData(TypedDict):
-    current_price: dict[_CurrencyCode, float]
-    price_change_percentage_24h: float
-
-
-class _ApiResponseEntry(TypedDict):
-    id: str
-    name: str
-    image: dict[Literal["thumb", "small", "large"], _ImgUrl]
-    market_data: _ApiMarketData
-
-
+@cache_coins
 async def get_all_coins(baseCurrency: str = "usd") -> list[Coin]:
     """Requests coin in coingecko-api and returns it"""
     coins: list[Coin] = []
@@ -51,6 +31,7 @@ async def get_specific_coins(
     return coins
 
 
+@cache_coin
 async def _get_coin(coin_id: str, baseCurrency: str = "usd") -> Coin:
     """Requests coin in coingecko-api and returns it"""
     response = await _get_response(coin_id)
@@ -58,21 +39,21 @@ async def _get_coin(coin_id: str, baseCurrency: str = "usd") -> Coin:
     return coin
 
 
-async def _get_parent_response() -> list[_ApiResponseEntry]:
+async def _get_parent_response() -> list[ApiResponseEntry]:
     # Need to consider about exceptions
     async with ClientSession() as session:
         async with session.get(_COINGECKO_URL) as resp:
             return await resp.json()
 
 
-async def _get_response(curency=None) -> _ApiResponseEntry:
+async def _get_response(curency=None) -> ApiResponseEntry:
     # Need to consider about exceptions
     async with ClientSession() as session:
         async with session.get(_COINGECKO_URL + curency) as resp:
             return await resp.json()
 
 
-async def _parse_response(response: _ApiResponseEntry, baseCurrency) -> Coin:
+async def _parse_response(response: ApiResponseEntry, baseCurrency) -> Coin:
     market_data = response["market_data"]
     coinInfo = Coin(
         id=response["id"],
@@ -112,8 +93,14 @@ def _price_rounder(price: float) -> Decimal:
 
 
 async def _test_service():
-    # coins = await get_specific_coins(["bitcoin", "ethereum"])
     coins = await get_all_coins()
+    msg = "All coins: "
+    for coin in coins:
+        msg += f"\n{coin.name} - {coin.price},"
+    print(msg, "\n")
+
+    coins = await get_specific_coins(["bitcoin", "ethereum"])
+    print("Specific coins:")
     for coin in coins:
         print(f"{coin.name}: {coin.price} ({coin.price_change_24h:+}%)")
 
