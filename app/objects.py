@@ -7,6 +7,7 @@ ImgUrl = str
 
 class Coin(NamedTuple):
     id: str
+    symbol: str
     name: str
     img_small: str
     img_large: str
@@ -21,6 +22,7 @@ class _ApiMarketData(TypedDict):
 
 class ApiResponseEntry(TypedDict):
     id: str
+    symbol: str
     name: str
     image: dict[Literal["thumb", "small", "large"], ImgUrl]
     market_data: _ApiMarketData

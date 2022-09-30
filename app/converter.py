@@ -1,6 +1,6 @@
 from aiogram import types  # type: ignore
 
-from .crypto_api_service import Coin
+from .objects import Coin
 
 
 def convert_to_cmd_message(coins: list[Coin]) -> str:

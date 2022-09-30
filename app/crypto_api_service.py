@@ -57,6 +57,7 @@ async def _parse_response(response: ApiResponseEntry, baseCurrency) -> Coin:
     market_data = response["market_data"]
     coinInfo = Coin(
         id=response["id"],
+        symbol=response["symbol"],
         name=response["name"],
         # "thumb" smaller than "small", bot too small
         img_small=response["image"]["small"],

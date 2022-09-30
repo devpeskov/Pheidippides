@@ -3,6 +3,7 @@ import pickle
 from redis import asyncio as redis  # type: ignore
 
 from .objects import Coin
+from .redis_key_storage import KeyStorage
 
 r = redis.Redis(host="localhost", port=6379, db=0)
 
@@ -26,6 +27,7 @@ def cache_coins(func):
                 await _set_inline_tokens_cached_status()
                 for coin in result:
                     await _cache_coin(coin)
+                KeyStorage().set_keys(result)
             return result
 
     return wrapper
@@ -76,7 +78,7 @@ async def _get_cached_coin(coin_id: str) -> Coin:
 
 async def _get_coins() -> list[Coin]:
     coins: list[Coin] = []
-    async for key in r.scan_iter("coin:*"):
+    for key in KeyStorage().get_keys():
         pickled_coin = await r.get(key)
         coin = pickle.loads(pickled_coin)
         coins.append(coin)
