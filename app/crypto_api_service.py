@@ -3,13 +3,13 @@ from decimal import Decimal
 
 from aiohttp import ClientSession
 
-from .caching import cache_coin, cache_coins
+from .caching import cache_all_coins, cache_coin
 from .objects import ApiResponseEntry, Coin
 
 _COINGECKO_URL = "https://api.coingecko.com/api/v3/coins/"
 
 
-@cache_coins
+@cache_all_coins
 async def get_all_coins(baseCurrency: str = "usd") -> list[Coin]:
     """Requests coin in coingecko-api and returns it"""
     coins: list[Coin] = []
