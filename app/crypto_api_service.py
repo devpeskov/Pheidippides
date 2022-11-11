@@ -1,7 +1,7 @@
 import asyncio
 from decimal import Decimal
 
-from aiohttp import ClientSession
+from aiohttp import ClientSession  # type: ignore
 
 from .caching import cache_all_coins, cache_coin
 from .objects import ApiResponseEntry, Coin
@@ -66,6 +66,7 @@ async def _parse_response(response: ApiResponseEntry, baseCurrency) -> Coin:
         price_change_24h=round(
             float(market_data["price_change_percentage_24h"]), 2
         ),
+        market_cap_rank=market_data["market_cap_rank"]
     )
     return coinInfo
 
@@ -100,7 +101,7 @@ async def _test_service():
         msg += f"\n{coin.name} - {coin.price},"
     print(msg, "\n")
 
-    coins = await get_specific_coins(["bitcoin", "ethereum"])
+    coins = await get_specific_coins(["bitcoin", "ethereum", "monero"])
     print("Specific coins:")
     for coin in coins:
         print(f"{coin.name}: {coin.price} ({coin.price_change_24h:+}%)")
