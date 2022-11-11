@@ -44,22 +44,23 @@ def cache_coin(func):
         if coin:
             # print(f"Took {coin_id} from cache")  # for debugging
             return coin
-        result = await func(coin_id, *args, **kwargs)
-        await _set_coin_to_cache(result)
-        return result
+        else:
+            result = await func(coin_id, *args, **kwargs)
+            await _set_coin_to_cache(result)
+            return result
 
     return wrapper
 
 
 async def _are_coins_cached() -> bool:
-    if await r.exists("are_inline_tokens_cached"):
+    if await r.exists("are_inline_coins_cached"):
         return True
     else:
         return False
 
 
 async def _set_are_coins_cached_status() -> None:
-    await r.set("are_inline_tokens_cached", "1", ex=30)
+    await r.set("are_inline_coins_cached", "1", ex=30)
 
 
 async def _get_all_coins_from_cache() -> list[Coin]:
@@ -73,10 +74,10 @@ async def _get_all_coins_from_cache() -> list[Coin]:
 
 async def _get_coin_from_cache(coin_id: str) -> Coin:
     pickled_coin = await r.get(f"coin:{coin_id}")
-    if pickled_coin:
-        coin = pickle.loads(pickled_coin)
-        return coin
-    return pickled_coin
+    if not pickled_coin:
+        return pickled_coin
+    coin = pickle.loads(pickled_coin)
+    return coin
 
 
 async def _set_coin_to_cache(coin: Coin) -> None:
