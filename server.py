@@ -7,6 +7,7 @@ from aiogram.types import BotCommand  # type: ignore
 from app.config import TOKEN
 from app.handlers.common_commands import register_handlers_common
 from app.handlers.inline_mode import register_inline_handlers
+from app.schedule import scheduler
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +46,8 @@ async def main() -> None:
 
     # await del_commands(bot)
     await set_commands(bot)
+
+    asyncio.get_event_loop().create_task(scheduler())
 
     await dp.start_polling()
 
