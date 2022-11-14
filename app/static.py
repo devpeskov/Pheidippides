@@ -12,15 +12,15 @@ def chooseSticker(coins: list[Coin]) -> str:
     price_change_24h = _get_price_change_24h(coins)
     if price_change_24h < -23:
         return _get_file_id(MoodStickers.NEGATIVE23.value)
-    elif price_change_24h < -19:
-        return _get_file_id(MoodStickers.NEGATIVE19.value)
     elif price_change_24h < -15:
-        return _get_file_id(MoodStickers.NEGATIVE15.value)
+        return _get_file_id(MoodStickers.NEGATIVE19.value)
     elif price_change_24h < -11:
-        return _get_file_id(MoodStickers.NEGATIVE11.value)
+        return _get_file_id(MoodStickers.NEGATIVE15.value)
     elif price_change_24h < -8:
-        return _get_file_id(MoodStickers.NEGATIVE8.value)
+        return _get_file_id(MoodStickers.NEGATIVE11.value)
     elif price_change_24h < -4:
+        return _get_file_id(MoodStickers.NEGATIVE8.value)
+    elif price_change_24h < -1:
         return _get_file_id(MoodStickers.NEGATIVE4.value)
     elif price_change_24h < 4:
         return _get_file_id(MoodStickers.POSITIVE4.value)
