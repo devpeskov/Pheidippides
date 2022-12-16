@@ -4,7 +4,7 @@ from .objects import Coin
 
 
 def convert_to_cmd_message(coins: list[Coin]) -> str:
-    msg = "The current course is this:\n"
+    msg = "The current rate is this:\n"
     for coin in coins:
         msg += (
             f"\n<b>{coin.name}</b>: ${coin.price} ({coin.price_change_24h:+}%)"
