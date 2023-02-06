@@ -1,8 +1,8 @@
 import asyncio
 import logging
 
-from aiogram import Bot, Dispatcher  # type: ignore
-from aiogram.types import BotCommand  # type: ignore
+from aiogram import Bot, Dispatcher
+from aiogram.types import BotCommand
 
 from app.config import TOKEN
 from app.handlers.common_commands import register_handlers_common
@@ -15,12 +15,16 @@ logger = logging.getLogger(__name__)
 async def set_commands(bot: Bot) -> None:
     commands = [
         BotCommand(
+            command="/start",
+            description="introduction to the bot",
+        ),
+        BotCommand(
             command="/getcrypto",
-            description="Get a cryptocurrency rate",
+            description="Get a short list of cryptocurrency rates",
         ),
         BotCommand(
             command="/getallcoins",
-            description="Get rate all cryptocurrency",
+            description="Get extended list of cryptocurrency rates",
         ),
     ]
     await bot.set_my_commands(commands)
