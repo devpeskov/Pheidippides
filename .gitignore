@@ -1,3 +1,3 @@
 __pycache__
 .env
-redis_keys.json
+chat_storage.json

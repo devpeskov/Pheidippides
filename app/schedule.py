@@ -1,9 +1,12 @@
 import asyncio
+import logging
 
-import aioschedule  # type: ignore
-from aiogram import Bot, types  # type: ignore
+import aioschedule
+from aiogram import Bot, types
+from aiogram.utils.exceptions import BadRequest, BotBlocked, BotKicked
 
-from .config import CHAT_ID, TOKEN
+from .chat_storage import ChatStorage
+from .config import TOKEN
 from .converter import convert_to_cmd_message
 from .crypto_api_service import get_specific_coins
 from .static import chooseSticker
@@ -14,10 +17,24 @@ async def cmd_getcrypto() -> None:
     coins = await get_specific_coins(["bitcoin", "ethereum", "monero"])
     sticker_file_id = chooseSticker(coins)
     msg = convert_to_cmd_message(coins)
-    await bot.send_sticker(chat_id=CHAT_ID, sticker=sticker_file_id)
-    await bot.send_message(
-        chat_id=CHAT_ID, text=msg, parse_mode=types.ParseMode.HTML
-    )
+
+    chat_storage = ChatStorage()
+    for chat_id in chat_storage.get_list_of_chats():
+        try:
+            await bot.send_sticker(chat_id=chat_id, sticker=sticker_file_id)
+            await bot.send_message(
+                chat_id=chat_id, text=msg, parse_mode=types.ParseMode.HTML
+            )
+        except BotKicked as e:
+            logging.error(e, f"chat_id: {chat_id}")
+            chat_storage.remove_chat(chat_id)
+        except BotBlocked as e:
+            logging.error(e, f"chat_id: {chat_id}")
+            chat_storage.remove_chat(chat_id)
+        except BadRequest as e:
+            logging.error(e, chat_id)
+        except Exception as e:
+            logging.error(e, chat_id)
 
 
 async def scheduler():

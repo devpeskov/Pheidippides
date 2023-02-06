@@ -10,16 +10,19 @@ async def cmd_start(message: types.Message) -> None:
     switch_kb = types.InlineKeyboardMarkup()
     switch_kb.add(
         types.InlineKeyboardButton(
-            text=f"Try with @{bot_name}", switch_inline_query_current_chat=""
+            text=f"Try @{bot_name}", switch_inline_query_current_chat=""
         )
     )
 
     await message.answer(
+        "Project developed by @devpeskov\n\n"
         "This bot provides cryptocurrency rates!\n\n"
         "Enter /getcrypto to output a short list of cryptocurrencies, "
-        "or /getallcoins for extended output. "
-        f"Or try to use <code>@{bot_name}</code> "
-        "operator by clicking the button below",
+        "or /getallcoins for extended output.\n\n"
+        "You can also subscribe and unsubscribe to daily crypto-rate "
+        "with commands /subscribe, /unsubscribe.\n\n"
+        f"And don't forget to try <code>@{bot_name}</code> operator "
+        "by clicking the button below!",
         parse_mode=types.ParseMode.HTML,
         reply_markup=switch_kb,
     )

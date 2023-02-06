@@ -6,4 +6,3 @@ from dotenv import load_dotenv  # type: ignore
 load_dotenv(join(dirname(__file__), "../.env"))
 
 TOKEN = getenv("TOKEN")
-CHAT_ID = getenv("CHAT_ID")
