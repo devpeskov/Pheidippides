@@ -15,7 +15,7 @@ async def get_all_coins(baseCurrency: str = "usd") -> list[Coin]:
     coins: list[Coin] = []
     parent_response = await _get_parent_response()
     for response in parent_response:
-        coin = await _parse_response(response, baseCurrency)
+        coin = _parse_response(response, baseCurrency)
         coins.append(coin)
     return coins
 
@@ -35,25 +35,25 @@ async def get_specific_coins(
 async def _get_coin(coin_id: str, baseCurrency: str = "usd") -> Coin:
     """Requests coin in coingecko-api and returns it"""
     response = await _get_response(coin_id)
-    coin = await _parse_response(response, baseCurrency)
+    coin = _parse_response(response, baseCurrency)
     return coin
 
 
 async def _get_parent_response() -> list[ApiResponseEntry]:
     # Need to consider about exceptions
     async with ClientSession() as session:
-        async with session.get(_COINGECKO_URL) as resp:
-            return await resp.json()
+        resp = await session.get(_COINGECKO_URL)
+        return await resp.json()
 
 
 async def _get_response(curency=None) -> ApiResponseEntry:
     # Need to consider about exceptions
     async with ClientSession() as session:
-        async with session.get(_COINGECKO_URL + curency) as resp:
-            return await resp.json()
+        resp = await session.get(_COINGECKO_URL + curency)
+        return await resp.json()
 
 
-async def _parse_response(response: ApiResponseEntry, baseCurrency) -> Coin:
+def _parse_response(response: ApiResponseEntry, baseCurrency) -> Coin:
     market_data = response["market_data"]
     coinInfo = Coin(
         id=response["id"],
