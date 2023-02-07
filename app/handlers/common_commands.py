@@ -20,7 +20,7 @@ async def cmd_start(message: types.Message) -> None:
         "Enter /getcrypto to output a short list of cryptocurrencies, "
         "or /getallcoins for extended output.\n\n"
         "You can also subscribe and unsubscribe to daily crypto-rate "
-        "with commands /subscribe, /unsubscribe.\n\n"
+        "with commands: /subscribe, /unsubscribe.\n\n"
         f"And don't forget to try <code>@{bot_name}</code> operator "
         "by clicking the button below!",
         parse_mode=types.ParseMode.HTML,
