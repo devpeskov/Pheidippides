@@ -15,7 +15,7 @@ async def cmd_start(message: types.Message) -> None:
     )
 
     await message.answer(
-        "Project developed by @devpeskov\n\n"
+        "Project developed by @peskovdev\n\n"
         "This bot provides cryptocurrency rates!\n\n"
         "Enter /getcrypto to output a short list of cryptocurrencies, "
         "or /getallcoins for extended output.\n\n"

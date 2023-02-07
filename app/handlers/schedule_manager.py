@@ -10,7 +10,7 @@ async def subscribe(message: types.Message) -> None:
     if is_result_success:
         msg = "Subscription completed!"
     else:
-        msg = "This chat is already subscribed!"
+        msg = "Subscription is already activated."
     msg = "\n\n".join([msg, "You can unsubscribe with command: /unsubscribe"])
     await message.answer(msg, parse_mode=types.ParseMode.HTML)
 
