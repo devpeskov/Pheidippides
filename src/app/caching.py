@@ -3,8 +3,9 @@ import pickle
 from redis import asyncio as redis  # type: ignore
 
 from .objects import Coin
+from .config import REDIS_URL, REDIS_PORT
 
-r = redis.Redis(host="localhost", port=6379, db=0)
+r = redis.Redis(host=REDIS_URL, port=REDIS_PORT, db=0)
 
 
 def cache_all_coins(func):

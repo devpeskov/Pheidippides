@@ -1,22 +1,22 @@
 [tool.poetry]
-name = "pheidippides"
+name = "src"
 version = "0.1.0"
 description = ""
-authors = ["inauris <inauris@protonmail.com>"]
+authors = ["Peskov Sergey <peskovdev@proton.me>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-aiogram = "^2.22.1"
-python-dotenv = "^0.21.0"
-redis = "^4.3.4"
+aiogram = "^2.25.1"
+python-dotenv = "^1.0.0"
+redis = "^4.5.4"
 aioschedule = "^0.5.2"
 
 
 [tool.poetry.group.dev.dependencies]
 pynvim = "^0.4.3"
-isort = "^5.10.1"
-black = "^22.8.0"
+isort = "^5.12.0"
+black = "^23.3.0"
 
 [build-system]
 requires = ["poetry-core"]

@@ -4,6 +4,7 @@ to telegram and returns their file_id and forms json-storge with them
 """
 import json
 import logging
+from os.path import dirname, join
 from pathlib import Path
 
 from aiogram import Bot, Dispatcher, executor, types  # type: ignore
@@ -26,7 +27,7 @@ async def send_stickers(message: types.Message):
     percentage_list = [4, 8, 11, 15, 19, 23]
     file_id_dict = {}
     for i in range(1, 7):
-        sti = open(f"webp_stickers/good/{i}.webp", "rb")
+        sti = open(join(dirname(__file__), f"./webp_stickers/good/{i}.webp"), "rb")
         msg = await message.answer_sticker(sti)
         await msg.reply(
             f"`{msg.sticker.file_id}`",
@@ -35,7 +36,7 @@ async def send_stickers(message: types.Message):
         file_id_dict[f"positive{percentage_list[i-1]}"] = msg.sticker.file_id
 
     for i in range(1, 7):
-        sti = open(f"webp_stickers/bad/{i}.webp", "rb")
+        sti = open(join(dirname(__file__), f"./webp_stickers/bad/{i}.webp"), "rb")
         msg = await message.answer_sticker(sti)
         await msg.reply(
             f"`{msg.sticker.file_id}`",

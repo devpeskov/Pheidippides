@@ -38,6 +38,7 @@ async def cmd_getcrypto() -> None:
 
 
 async def scheduler():
+    # aioschedule.every(10).seconds.do(cmd_getcrypto)
     aioschedule.every().day.at("06:00").do(cmd_getcrypto)
     aioschedule.every().day.at("18:00").do(cmd_getcrypto)
     while True:

@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  pheidippides:
+    container_name: 'pheidippides'
+    build: ./src
+    command: python server.py
+    # command: python upload_static_server/server.py
+    volumes:
+      - ./src:/code
+    restart: always
+    depends_on:
+      - pheidippides-redis
+
+  pheidippides-redis:
+    container_name: pheidippides-redis
+    image: redis
+    command: [sh, -c, "rm -f /data/dump.rdb && redis-server"]
+
+volumes:
+  src:

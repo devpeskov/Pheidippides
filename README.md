@@ -28,24 +28,22 @@ After subscribing, the bot will send a message similar to `/getcrypto` twice a d
 
 
 ### <a name="setup"></a> Setup
-- Download the repository and install the dependencies:
-    ```bash
-    git clone https://github.com/peskovdev/pheidippides.git
-    cd pheidippides
-    poetry env use python
-    source $(poetry env info --path)/bin/activate && poetry install
-    ```
-- Then create a file `.env`:
-    ```bash
-    echo '# Bot token from @BotFather
-    TOKEN = "YOUR_BOT_TOKEN"' > .env
-    ```
+- `git clone https://github.com/peskovdev/pheidippides.git`
+- `cd pheidippides`
+- Create `.env` file and substitute your botfather token:
+  ```bash
+  cp ./src/.env_example ./src/.env2
+  ```
+
 - Initialize static files - get the stickers id
-  - Run temporary server: `python upload_static_server/server.py`
+  - Run temporary server:
+    - in order to change `command`in `docker-compose.yml`, comment 7 line and uncomment 8
+    - run: `docker-compose up --build`
   - In chat with bot enter: `/fill_stickers`
   - Then stop server, and check `mood_stickers.json`
+  - In `docker-compose.yml` change command back
 - Enable inline mode (`/setinline` in chat with `@BotFather`)
-- Finally run bot: `python server.py`
+- Finally run bot: `docker-compose up --build`
 
 
 ### Donations
