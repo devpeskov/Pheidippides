@@ -32,7 +32,7 @@ After subscribing, the bot will send a message similar to `/getcrypto` twice a d
 - `cd pheidippides`
 - Create `.env` file and substitute your botfather token:
   ```bash
-  cp ./src/.env_example ./src/.env2
+  cp ./src/.env_example ./src/.env
   ```
 
 - Initialize static files - get the stickers id
